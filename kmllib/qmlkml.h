@@ -102,6 +102,7 @@ private:
     Q_PROPERTY(QVariantMap styles READ styles CONSTANT)
     Q_PROPERTY(QVariantList vertices READ vertices CONSTANT)
     Q_PROPERTY(QString styleName READ styleName CONSTANT)
+    Q_PROPERTY(QString extraData READ extraData CONSTANT)
     Q_PROPERTY(int boundCount READ boundCount CONSTANT)
 public:
     QGeoRectangle bounds() const;
@@ -110,6 +111,7 @@ public:
     QGeoCoordinate center() const;
     QString type() const;
     QString styleName() const;
+    QString extraData() const;
     int boundCount() const;
 public:
     Q_INVOKABLE bool isIn(const QGeoCoordinate& coord) const;
@@ -134,6 +136,7 @@ class KmlQmlRenderer: public QObject{
     Q_PROPERTY(QGeoRectangle bounds READ bounds NOTIFY boundsChanged)
     Q_PROPERTY(QString identifier READ identifier NOTIFY identifierChanged)
 public:
+    // bzd in my version these 3 were commented out
     Q_INVOKABLE void setStyles(const QString& name, const QVariantMap& style);
     Q_INVOKABLE QVariantMap styles(const QString& name) const;
     Q_INVOKABLE QStringList styleNames() const;

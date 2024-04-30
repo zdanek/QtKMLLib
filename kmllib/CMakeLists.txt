@@ -9,9 +9,9 @@ find_library(Expat NAMES expat REQUIRED)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/third_party/libkml/cmake;${CMAKE_MODULE_PATH}")
 add_subdirectory(third_party)
 
-find_package(Qt6 REQUIRED COMPONENTS Gui Quick Positioning REQUIRED)
+find_package(Qt5 REQUIRED COMPONENTS Gui Quick Positioning REQUIRED)
 
-qt_standard_project_setup()
+#qt_standard_project_setup()
 
 
 set(HEADERS
@@ -48,6 +48,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party/libkml/src
     ${Boost_INCLUDE_DIRS}
 )
+
+message(STATUS "Expat ${Expat}")
 
 target_link_libraries(${PROJECT_NAME}
     Qt::Core

@@ -2,9 +2,10 @@
 #define KMLGRAPHICS_H
 
 #include "kmldocument.h"
-#include <QPixmap>
-#include <QHash>
 #include <functional>
+#include <iostream>
+#include <QHash>
+#include <QPixmap>
 
 namespace QtKml{
 
@@ -13,7 +14,11 @@ class KmlQmlGraphics;
 
 class KmlQmlGraphicsPrivate : KmlDocumentMonitor{
 public:
-    KmlQmlGraphicsPrivate(KmlQmlGraphics* parent) : q_ptr(parent){}
+    KmlQmlGraphicsPrivate(KmlQmlGraphics* parent) : q_ptr(parent)
+    {
+        std::cout << "KmlQmlGraphicsPrivate::KmlQmlGraphicsPrivate() " << this << std::endl;
+
+    }
     int append(const QString& id, KmlQmlRenderer* renderer);
     int remove(const QString& id);
     bool contains(const QString& id) const {return m_renderers.contains(id);}

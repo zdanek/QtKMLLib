@@ -1,7 +1,8 @@
 #include "kmlelement.h"
 #include "mercatorprojection.h"
-#include "qtkml.h"
 #include "qmlkml.h"
+#include "qtkml.h"
+#include <iostream>
 
 using namespace QtKml;
 
@@ -71,7 +72,10 @@ QString KmlElementBasePrivate::type() const{
     case Graphics::Point: return KmlElement::POINT;
     case Graphics::Polygon: return KmlElement::POLYGON;
     case Graphics::PolyLine: return KmlElement::POLYLINE;
-    default: return QString("");
+    case Graphics::SvgIconLabel: return KmlElement::SVG_ICON_LABEL;
+    default:
+        std::cout << "KmlElementBasePrivate: Map Unknown type " << m_g->type() << std::endl;
+        return QString("type_" + QString::number(m_g->type()));
     }
 }
 
@@ -128,6 +132,10 @@ QString KmlQmlElement::styleName() const{
     return d->styleName();
 }
 
+QString KmlQmlElement::extraData() const{
+    Q_D(const KmlQmlElement);
+    return d->extraData();
+}
 
 KmlElementPrivate::KmlElementPrivate(const StyleParams& styles, const Graphics::GraphicsPtr ptr) :
     KmlElementBasePrivate(styles, ptr){

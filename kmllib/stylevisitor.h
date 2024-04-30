@@ -35,6 +35,8 @@ public:
 };
 */
 
+static constexpr char DEFAULT_STYLE_ID[] = "default";
+
 class StyleParams : public QVariantMap {
 public:
     virtual ~StyleParams() = default;
@@ -47,7 +49,8 @@ public:
     void setLineColor(const QColor& color) {insert(KmlElement::LINE_COLOR, QVariant::fromValue(color));}
     void setFillColor(const QColor& color) {insert(KmlElement::FILL_COLOR, QVariant::fromValue(color));}
     void setLineWidth(qreal width) {insert(KmlElement::LINE_WIDTH, width);}
-    void setIsFill(bool fill) {insert(KmlElement::FILL, fill);}
+    void setIsFill(bool fill) { insert(KmlElement::FILL, fill); }QtKml::
+    StyleParams & from(const kmldom::StylePtr & style);
 };
 
 class StyleVisitor : public kmldom::Visitor{
@@ -61,6 +64,7 @@ public:
     StyleVisitor(StyleList& styles);
     virtual ~StyleVisitor();
     QString currentStyleId(const kmldom::ElementPtr& element) const;
+    static const StyleParams defaultStyleParams(const kmldom::ElementPtr &element);
 protected:
     virtual void VisitStyle(const kmldom::StylePtr &element);
 private:

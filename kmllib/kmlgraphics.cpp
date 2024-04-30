@@ -1,17 +1,18 @@
 #include <QtQml>
 #include <QPainter>
 
-
 #include "kmlgraphics.h"
 #include "kmlrenderer.h"
-#include "qtkml.h"
-#include "qmlkml.h"
 #include "mercatorprojection.h"
+#include "qmlkml.h"
+#include "qtkml.h"
+#include <iostream>
 
 using namespace QtKml;
 
 KmlQmlGraphicsPrivate::~KmlQmlGraphicsPrivate(){
     for(const auto& r : qAsConst(m_renderers)){
+        // bzd in my version this was commented out
         r->d_ptr->freeMonitor(this);
     }
 }
@@ -33,6 +34,8 @@ KmlQmlRenderer* KmlQmlGraphicsPrivate::at(int index) const{
 
 int KmlQmlGraphicsPrivate::append(const QString& id, KmlQmlRenderer* renderer){
     Q_ASSERT(renderer->parent());
+    // log
+    std::cout << "KmlQmlGraphicsPrivate::append " << id.toStdString() << " self " << this << " renderer " << renderer << std::endl;
     m_renderers.insert(id, renderer);
     return m_renderers.count();
 }
@@ -62,6 +65,7 @@ void KmlQmlGraphicsPrivate::renderAll(QPainter& painter,  const QRect& rect, qre
   //  painter.fillRect(rect, Qt::transparent);
     for(const auto& r : qAsConst(m_renderers) ){
         if(filter == nullptr || filter(r->identifier())){
+            // bzd in my version this was commented out
             r->d_ptr->doc()->renderAll(painter, rect, zoom, centerPoint);
         }
     }
@@ -80,6 +84,7 @@ void KmlQmlGraphicsPrivate::renderAll(const QSize& size, qreal zoom, const QPoin
 }
 
 KmlQmlGraphics::KmlQmlGraphics(QObject* parent) : QObject(parent), d_ptr(new KmlQmlGraphicsPrivate(this)){
+    std::cout << "KmlQmlGraphics::KmlQmlGraphics() " << this << std::endl;
     qmlRegisterUncreatableType<KmlQmlRenderer>("QtKML", 1, 0, "KmlRenderer", "QtKML");
     qmlRegisterUncreatableType<KmlQmlElement>("QtKML", 1, 0, "KmlElement", "QtKML");
     qmlRegisterType<KmlItem>("QtKML", 1, 0, "KmlItem");
@@ -92,18 +97,27 @@ bool KmlQmlGraphics::append(KmlDocument* document, const QString& identifier){
     if(document == nullptr)
         return false; //null is not ok
     if(!identifier.isEmpty()){ //id can be empty
-        if(!document->d_ptr->identifier().isEmpty())
+        if(!document->d_ptr->identifier().isEmpty()) {
+
             return false; //but then there shall not be id
+        }
+        // bzd in my version this was commented out
         document->d_ptr->setIdentifier(identifier); //set id
+    } else {
+        std::cout << "KmlQmlGraphics::append: id is empty ";
     }
+
     if(!document->parent()){
         document->setParent(this);
     }
+    std::cout << "KmlQmlGraphics::append " << identifier.toStdString() << " self " << this << " document " << document << std::endl;
     auto renderer = new KmlQmlRenderer(document->d_ptr, document);
     QObject::connect(document, &KmlDocument::imageChanged, this, &KmlQmlGraphics::renderersChanged);
     QObject::connect(renderer, &KmlQmlRenderer::documentChanged, this, &KmlQmlGraphics::renderersChanged);
     remove(nullptr, identifier);
-    d->append(identifier, renderer);
+    int count = d->append(identifier, renderer);
+    std::cout << "KmlQmlGraphics::append count " << count << std::endl;
+    // bzd in my version this was commented out
     document->d_ptr->setMonitor(d);
     emit documentAdded(identifier);
     emit renderersChanged();
@@ -137,15 +151,18 @@ QStringList KmlQmlGraphics::documents() const{
 }
 
 QQmlListProperty<QObject> KmlQmlGraphics::renderers(){
-    const QQmlListProperty<KmlQmlRenderer>::CountFunction cf = [](QQmlListProperty<KmlQmlRenderer>* r)->qsizetype{
+    // bzd in my version this was commented out ===  static_cast<KmlQmlGraphics*>(r->object)
+    const QQmlListProperty<KmlQmlRenderer>::CountFunction cf = [](QQmlListProperty<KmlQmlRenderer>* r)->int{
+        std::cout << "KmlQmlGraphics::renderers count " << std::endl;
         return qobject_cast<KmlQmlGraphics*>(r->object)->d_ptr->count();
     };
-    const QQmlListProperty<KmlQmlRenderer>::AtFunction af = [](QQmlListProperty<KmlQmlRenderer>* r, qsizetype index)->KmlQmlRenderer*{
+    // bzd in my version this was commented out
+    const QQmlListProperty<KmlQmlRenderer>::AtFunction af = [](QQmlListProperty<KmlQmlRenderer>* r, int index)->KmlQmlRenderer*{
         return qobject_cast<KmlQmlGraphics*>(r->object)->d_ptr->at(index);
     };
-    return QQmlListProperty<QObject>(this, nullptr, (QQmlListProperty<QObject>::CountFunction) cf, (QQmlListProperty<QObject>::AtFunction) af);
-}
 
+    return QQmlListProperty<QObject>(this, this, (QQmlListProperty<QObject>::CountFunction) cf, (QQmlListProperty<QObject>::AtFunction) af);
+}
 
 QGeoRectangle KmlQmlGraphics::bounds() const{
     Q_D(const KmlQmlGraphics);

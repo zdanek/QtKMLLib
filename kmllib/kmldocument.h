@@ -22,6 +22,11 @@ class KmlDocumentPrivate : public UrlDataProvider, public CustomStyleProvider{
 public:
     KmlDocumentPrivate(){}
     virtual ~KmlDocumentPrivate();
+    // Coord centerPoint() const;
+    // kmldom::FeaturePtr rootFeature() const {return asFeature(m_root);}
+    // QGeoRectangle bounds() const;
+    // QString identifier() const {return m_identifier;}
+// private:
     void setRoot(kmldom::ElementPtr root){ m_root = root;}
     void renderAll(QPainter& painter, const QRect& rect, qreal zoom, const QPointF& centerPoint);
     void renderAll(QPixmap& image, const QSize& size, qreal zoom, const QPointF& midpoint, bool erase);

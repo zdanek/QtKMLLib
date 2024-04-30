@@ -19,6 +19,7 @@ public:
     StyleParams styles() const {return m_styles;}
     QString type() const;
     QString styleName() const {return m_g->styleId();}
+    QString extraData() const {return m_g->extraData();}
     QGeoCoordinate centerPoint() const;
     QGeoRectangle bounds() const;
     QPolygonF polygon() const;

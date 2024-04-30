@@ -187,6 +187,11 @@ QVector<KmlElement> KmlDocument::elements() const {
     return *elements;
 }
 
+kmldom::FeaturePtr KmlDocument::rootFeature()
+{
+    Q_D(const KmlDocument);
+    return d->rootFeature();
+}
 
 #ifdef KMLCACHE
 class Fetcher : public kmlbase::NetFetcher{

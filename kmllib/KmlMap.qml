@@ -22,6 +22,7 @@ Map {
 
     function drawOverlays(){
         for(var g = 0; g < kmlgraphics.graphics.length; g++){
+            console.log("gra", kmlgraphics.graphics)
             var graphics = kmlgraphics.graphics[g]
             console.log("elements " + graphics.elements.length);
             for(var i = 0; i < graphics.elements.length; i++){
@@ -39,6 +40,7 @@ Map {
                     break
                 case "polyline":
                     var polyline = Qt.createQmlObject('import QtLocation 5.5; MapPolyline{smooth:true;antialiasing:true}', map, "mapPolyline")
+                    console.log("style " + element.styles["line_width"])
                     polyline.line.width = element.styles["line_width"]
                     polyline.line.color = _torealColor(element.styles["line_color"])
                     _drawVertices(element, polyline)

@@ -14,6 +14,7 @@ class KmlDocument;
 
 class KmlQmlRendererPrivate {
 public:
+    StyleParams resolveStyleParams(const QSharedPointer<KmlDocumentPrivate> &doc, const std::shared_ptr<Graphics> &g);
     KmlQmlRendererPrivate(QObject* owner, const QSharedPointer<KmlDocumentPrivate>& doc/*, KmlDocument* parent*/);
     int polygonCount() const;
     const Graphics* graphics(int index) const;
@@ -24,9 +25,10 @@ public:
     const KmlDocumentPrivate* doc() const {return m_doc.data();}
     KmlDocumentPrivate* doc() {return m_doc.data();}
     const QVector<KmlQmlElement*>& elements() const {return m_list;}
+    // bzd in my version this was commented out
     void freeMonitor(KmlDocumentMonitor* ptr) {if(m_doc != nullptr && m_doc->isMonitor(ptr)) m_doc->setMonitor(nullptr);}
 private:
-//    friend class KmlQmlRenderer;
+    // friend class KmlQmlRenderer;
     Coord m_centerPoint;
     QSharedPointer<KmlDocumentPrivate> m_doc;
     Graphics::GraphicsList m_graphics;

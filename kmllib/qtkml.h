@@ -2,14 +2,15 @@
 #define QTKML_H
 
 #include <memory> //Android C++11 requires this
-#include <QString>
-#include <QSharedPointer>
-#include <QObject>
-#include <QVector>
-#include <QVariant>
-#include <QGeoCoordinate>
 #include <QGeoRectangle>
+#include <QObject>
+#include <QSharedPointer>
+#include <QString>
 #include <QStringList>
+#include <QVariant>
+#include <QVector>
+
+#include <kml/dom/kml_ptr.h>
 
 class QIODevice;
 
@@ -59,6 +60,7 @@ public:
     static constexpr auto POINT = "point";
     static constexpr auto POLYGON = "polygon";
     static constexpr auto POLYLINE = "polyline";
+    static constexpr auto SVG_ICON_LABEL = "svgWithLabel";
     static constexpr auto FILL = "fill";
     static constexpr auto FILL_COLOR = "fill_color";
     static constexpr auto LINE_COLOR = "line_color";
@@ -159,6 +161,9 @@ public:
      * @return
      */
     bool isOpen() const;
+
+    kmldom::FeaturePtr rootFeature();
+
     /**
      * @brief urlRequests
      * @return
