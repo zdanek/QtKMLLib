@@ -1,18 +1,14 @@
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 find_package(ZLIB REQUIRED)
 find_package(Boost REQUIRED)
 find_library(MiniZip NAMES minizip REQUIRED)
 find_library(UriParser NAMES uriparser REQUIRED)
 find_library(Expat NAMES expat REQUIRED)
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/third_party/libkml/cmake;${CMAKE_MODULE_PATH}")
-add_subdirectory(third_party)
+set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/third_party/libkml/lib/cmake;${CMAKE_PREFIX_PATH}")
 
 find_package(Qt5 REQUIRED COMPONENTS Gui Quick Positioning REQUIRED)
 
-#qt_standard_project_setup()
 
+find_package(LibKML REQUIRED)
 
 set(HEADERS
     qtkml.h
@@ -39,19 +35,21 @@ set(SOURCES
     kmlrenderer.cpp
     kmlitem.cpp)
 
-add_library(${PROJECT_NAME}
+add_library(qtkml
     ${HEADERS}
     ${SOURCES}
     )
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/libkml/src
-    ${Boost_INCLUDE_DIRS}
-)
+target_include_directories(qtkml PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    )
 
-message(STATUS "Expat ${Expat}")
+target_include_directories(qtkml PUBLIC ${LIBKML_INCLUDE_DIRS})
 
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(qtkml
+    PUBLIC
+    ${LIBKML_LIBRARIES}
+    PRIVATE
     Qt::Core
     Qt::Gui
     Qt::Positioning
@@ -59,12 +57,6 @@ target_link_libraries(${PROJECT_NAME}
     ZLIB::ZLIB
     ${Expat}
     ${UriParser}
-    ${MiniZip}
-    $<TARGET_OBJECTS:kmlbase>
-    $<TARGET_OBJECTS:kmlconvenience>
-    $<TARGET_OBJECTS:kmldom>
-    $<TARGET_OBJECTS:kmlengine>
-    $<TARGET_OBJECTS:kmlregionator>
-    $<TARGET_OBJECTS:kmlxsd>
-    )
+    ${MiniZip})
+
 

@@ -6,8 +6,8 @@
 #include <QHash>
 #include <QColor>
 #include "qtkml.h"
-#include "kml/dom.h"
-#include "kml/engine.h"
+#include <kml/dom.h>
+#include <kml/engine.h>
 
 namespace QtKml{
 

@@ -15,5 +15,5 @@ set(LINEDRAW
         ${LINEDRAW_PATH}/linepath.cpp
     )
 
-add_subdirectory(KmlImageTest)
+#add_subdirectory(KmlImageTest)
 #add_subdirectory(KMLTest)

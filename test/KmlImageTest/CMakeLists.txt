@@ -1,12 +1,12 @@
 
 set(NAME KmlImageTest)
 
-find_package(Qt6
+find_package(Qt5
     COMPONENTS Quick Positioning Xml Network OpenGL Qml Widgets QuickWidgets
     REQUIRED)
 
 
-qt_standard_project_setup()
+#qt_standard_project_setup()
 
 set(CMAKE_AUTORCC ON)
 
@@ -27,8 +27,8 @@ target_link_libraries(${NAME} PRIVATE
 	Qt::Qml
 	Qt::Quick
         Qt::Widgets
-        Qt6::OpenGL
-        Qt6::QuickWidgets
+        Qt5::OpenGL
+        Qt5::QuickWidgets
 	qtkml
         )
 
