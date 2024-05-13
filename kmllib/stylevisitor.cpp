@@ -6,7 +6,6 @@
 
 using namespace QtKml;
 
-//constexpr char StyleParams::DEFAULT_ICON[];
 
 StyleParams &StyleParams::from(const kmldom::StylePtr &style)
 {
@@ -31,6 +30,7 @@ StyleParams &StyleParams::from(const kmldom::StylePtr &style)
             setIcon(QString::fromStdString(style->get_iconstyle()->get_icon()->get_href()));
         }
     }
+    return *this;
 }
 
 StyleVisitor::StyleVisitor(StyleList& styles) : m_styles(&styles){
